@@ -1,0 +1,125 @@
+---
+title: "dataIntegration_file1to13"
+output: pdf_document
+---
+
+```{r}
+library(dplyr)
+```
+
+# Read in happiness data
+```{r}
+happiness = read.csv("data/2020.csv")
+```
+
+# Read in world health data
+```{r}
+probOfDyingFromDisease = read.csv("data/30-70cancerChdEtc.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(probOfDyingFromDisease = First.Tooltip) %>%
+  select(Location, probOfDyingFromDisease)
+
+adolescentBirthRate = read.csv("data/adolescentBirthRate.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(adolescentBirthRate = First.Tooltip) %>%
+  select(Location, adolescentBirthRate)
+
+airPollutionDeathRate = read.csv("data/airPollutionDeathRate.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(airPollutionDeathRate = First.Tooltip) %>%
+  select(Location, airPollutionDeathRate)
+
+alcoholSubstanceAbuse = read.csv("data/alcoholSubstanceAbuse.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(alcoholSubstanceAbuse = First.Tooltip) %>%
+  select(Location, alcoholSubstanceAbuse)
+
+basicSanitizationServices = read.csv("data/atLeastBasicSanitizationServices.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Total") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(basicSanitizationServices = First.Tooltip) %>%
+  select(Location, basicSanitizationServices)
+
+basicHandwashing = read.csv("data/basicHandWashing.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Total") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(basicHandwashing = First.Tooltip) %>%
+  select(Location, basicHandwashing)
+
+birthsAttendedBySkilledPersonal = read.csv("data/birthAttendedBySkilledPersonal.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(birthsAttendedBySkilledPersonal = First.Tooltip) %>%
+  select(Location, birthsAttendedBySkilledPersonal)
+
+cleanFuelAndTech = read.csv("data/cleanFuelAndTech.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(cleanFuelAndTech = First.Tooltip) %>%
+  select(Location, cleanFuelAndTech)
+
+suicideRates = read.csv("data/crudeSuicideRates.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(suicideRates = First.Tooltip) %>%
+  select(Location, suicideRates)
+
+dataAvailabilityForUHC = read.csv("data/dataAvailibilityForUhc.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(dataAvailabilityForUHC = First.Tooltip) %>%
+  select(Location, dataAvailabilityForUHC)
+
+dentistsAvailable = read.csv("data/dentists.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(dentistsAvailable = First.Tooltip) %>%
+  select(Location, dentistsAvailable)
+
+violenceAgainstWomen = read.csv("data/eliminateViolenceAgainstWomen.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim2 == "15-49 years") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(row_number() == 1) %>%
+  mutate(violenceAgainstWomen = First.Tooltip) %>%
+  select(Location, violenceAgainstWomen)
+```
+
+
+```{r}
+happinessNew = merge(happiness, adolescentBirthRate, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, airPollutionDeathRate, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, alcoholSubstanceAbuse, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, basicHandwashing, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, basicSanitizationServices, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, birthsAttendedBySkilledPersonal, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, cleanFuelAndTech, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, dataAvailabilityForUHC, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, dentistsAvailable, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, probOfDyingFromDisease, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, suicideRates, by.x="Country.name", by.y="Location")
+happinessNew = merge(happinessNew, violenceAgainstWomen, by.x="Country.name", by.y="Location")
+```
+
+
