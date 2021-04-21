@@ -9,7 +9,18 @@ library(dplyr)
 
 # Read in happiness data
 ```{r}
-happiness = read.csv("data/2020.csv")
+happiness2020 = read.csv("data/2020.csv")
+happiness2020$year = rep(2020, nrow(happiness2020))
+happiness2019 = read.csv("data/2019.csv")
+happiness2019$year = rep(2019, nrow(happiness2019))
+happiness2018 = read.csv("data/2018.csv")
+happiness2018$year = rep(2018, nrow(happiness2018))
+happiness2017 = read.csv("data/2017.csv")
+happiness2017$year = rep(2017, nrow(happiness2017))
+happiness2016 = read.csv("data/2016.csv")
+happiness2016$year = rep(2016, nrow(happiness2016))
+happiness2015 = read.csv("data/2015.csv")
+happiness2015$year = rep(2019, nrow(happiness2015))
 ```
 
 # Read in world health data
@@ -18,92 +29,92 @@ probOfDyingFromDisease = read.csv("data/30-70cancerChdEtc.csv", stringsAsFactors
   filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(probOfDyingFromDisease = First.Tooltip) %>%
-  select(Location, probOfDyingFromDisease)
+  select(Location, Period, probOfDyingFromDisease)
 
 adolescentBirthRate = read.csv("data/adolescentBirthRate.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(adolescentBirthRate = First.Tooltip) %>%
-  select(Location, adolescentBirthRate)
+  select(Location, Period, adolescentBirthRate)
 
 airPollutionDeathRate = read.csv("data/airPollutionDeathRate.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(airPollutionDeathRate = First.Tooltip) %>%
-  select(Location, airPollutionDeathRate)
+  select(Location, Period, airPollutionDeathRate)
 
 alcoholSubstanceAbuse = read.csv("data/alcoholSubstanceAbuse.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(alcoholSubstanceAbuse = First.Tooltip) %>%
-  select(Location, alcoholSubstanceAbuse)
+  select(Location, Period, alcoholSubstanceAbuse)
 
 basicSanitizationServices = read.csv("data/atLeastBasicSanitizationServices.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Total") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(basicSanitizationServices = First.Tooltip) %>%
-  select(Location, basicSanitizationServices)
+  select(Location, Period, basicSanitizationServices)
 
 basicHandwashing = read.csv("data/basicHandWashing.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Total") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(basicHandwashing = First.Tooltip) %>%
-  select(Location, basicHandwashing)
+  select(Location, Period, basicHandwashing)
 
 birthsAttendedBySkilledPersonal = read.csv("data/birthAttendedBySkilledPersonal.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(birthsAttendedBySkilledPersonal = First.Tooltip) %>%
-  select(Location, birthsAttendedBySkilledPersonal)
+  select(Location, Period, birthsAttendedBySkilledPersonal)
 
 cleanFuelAndTech = read.csv("data/cleanFuelAndTech.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(cleanFuelAndTech = First.Tooltip) %>%
-  select(Location, cleanFuelAndTech)
+  select(Location, Period, cleanFuelAndTech)
 
 suicideRates = read.csv("data/crudeSuicideRates.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(suicideRates = First.Tooltip) %>%
-  select(Location, suicideRates)
+  select(Location, Period, suicideRates)
 
 dataAvailabilityForUHC = read.csv("data/dataAvailibilityForUhc.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(dataAvailabilityForUHC = First.Tooltip) %>%
-  select(Location, dataAvailabilityForUHC)
+  select(Location, Period, dataAvailabilityForUHC)
 
 dentistsAvailable = read.csv("data/dentists.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(dentistsAvailable = First.Tooltip) %>%
-  select(Location, dentistsAvailable)
+  select(Location, Period, dentistsAvailable)
 
 violenceAgainstWomen = read.csv("data/eliminateViolenceAgainstWomen.csv", stringsAsFactors = TRUE) %>%
   filter(Dim2 == "15-49 years") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  filter(row_number() == 1) %>%
+  #filter(row_number() == 1) %>%
   mutate(violenceAgainstWomen = First.Tooltip) %>%
-  select(Location, violenceAgainstWomen)
+  select(Location, Period, violenceAgainstWomen)
 ```
 
 
