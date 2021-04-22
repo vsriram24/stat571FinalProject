@@ -63,113 +63,102 @@ healthyLifeExpectancy = read.csv("data/HALElifeExpectancyAtBirth.csv", stringsAs
   mutate(healthyLifeExpectancy = First.Tooltip) %>%
   select(Location, Period, healthyLifeExpectancy)
 
-test <- healthyLifeExpectancy %>%
-  ungroup() %>%
-  select(Period) %>%
-  distinct()
+# Ignored next dataset because it only had data by region
+
+# 2015
+hepBAntigen = read.csv("data/hepatitusBsurfaceAntigen.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(hepBAntigenPrev = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, hepBAntigenPrev)
 
 # 2015 to 2018
-adolescentBirthRate = read.csv("data/adolescentBirthRate.csv", stringsAsFactors = TRUE) %>%
+malaria = read.csv("data/incedenceOfMalaria.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
   filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(adolescentBirthRate = First.Tooltip) %>%
-  select(Location, Period, adolescentBirthRate)
-
-# 2016
-airPollutionDeathRate = read.csv("data/airPollutionDeathRate.csv", stringsAsFactors = TRUE) %>%
-  filter(Dim1 == "Both sexes") %>%
-  group_by(Location) %>%
-  arrange(Period) %>%
-  filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(airPollutionDeathRate = First.Tooltip) %>%
-  select(Location, Period, airPollutionDeathRate)
-
-# 2015 to 2018
-alcoholSubstanceAbuse = read.csv("data/alcoholSubstanceAbuse.csv", stringsAsFactors = TRUE) %>%
-  filter(Dim1 == "Both sexes") %>%
-  group_by(Location) %>%
-  arrange(Period) %>%
-  filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(alcoholSubstanceAbuse = First.Tooltip) %>%
-  select(Location, Period, alcoholSubstanceAbuse)
-
-# 2015 to 2017
-basicSanitizationServices = read.csv("data/atLeastBasicSanitizationServices.csv", stringsAsFactors = TRUE) %>%
-  filter(Dim1 == "Total") %>%
-  group_by(Location) %>%
-  arrange(Period) %>%
-  filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(basicSanitizationServices = First.Tooltip) %>%
-  select(Location, Period, basicSanitizationServices)
-
-# 2015 to 2017
-basicHandwashing = read.csv("data/basicHandWashing.csv", stringsAsFactors = TRUE) %>%
-  filter(Dim1 == "Total") %>%
-  group_by(Location) %>%
-  arrange(Period) %>%
-  filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(basicHandwashing = First.Tooltip) %>%
-  select(Location, Period, basicHandwashing)
+  mutate(malariaPer1kAtRisk = First.Tooltip) %>%
+  select(Location, Period, malariaPer1kAtRisk)
+# some countries have 0, may need to exclude
 
 # 2015 to 2019
-birthsAttendedBySkilledPersonal = read.csv("data/birthAttendedBySkilledPersonal.csv", stringsAsFactors = TRUE) %>%
+tuberculosis = read.csv("data/incedenceOfTuberculosis.csv", stringsAsFactors = TRUE) %>%
+ group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(tbPer100k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, tbPer100k)
+
+# 2015 to 2019
+infantMortality = read.csv("data/infantMortalityRate.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
   filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(birthsAttendedBySkilledPersonal = First.Tooltip) %>%
-  select(Location, Period, birthsAttendedBySkilledPersonal)
+  mutate(infantMortalityPer1k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, infantMortalityPer1k)
 
 # 2015 to 2018
-cleanFuelAndTech = read.csv("data/cleanFuelAndTech.csv", stringsAsFactors = TRUE) %>%
+NTDIntervention = read.csv("data/interventionAgianstNTDs.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
   arrange(Period) %>%
   filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(cleanFuelAndTech = First.Tooltip) %>%
-  select(Location, Period, cleanFuelAndTech)
+  mutate(NTDIntervention = First.Tooltip) %>%
+  select(Location, Period, NTDIntervention)
+# Provides # of people not rate so may not be best measure
+
+# 2015, 2019
+lifeExpectancy = read.csv("data/lifeExpectancyAtBirth.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(lifeExpectancy = First.Tooltip) %>%
+  select(Location, Period, lifeExpectancy)
+
+# 2015 to 2017
+maternalMortality = read.csv("data/maternalMortalityRatio.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(maternalMortalityPer100k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, maternalMortalityPer100k)
+
+# 2015 to 2018 (not consistent by country)
+doctors = read.csv("data/medicalDoctors.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(DoctorsPer10k = First.Tooltip) %>%
+  select(Location, Period, DoctorsPer10k)
 
 # 2015 to 2016
-suicideRates = read.csv("data/crudeSuicideRates.csv", stringsAsFactors = TRUE) %>%
+mortalityRatePoisoning = read.csv("data/mortalityRatePoisoning.csv", stringsAsFactors = TRUE) %>%
   filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
   filter(Period > 2014) %>%
-  #filter(row_number() == 1) %>%
-  mutate(suicideRates = First.Tooltip) %>%
-  select(Location, Period, suicideRates)
+  mutate(mortalityRatePoisoningPer100k = First.Tooltip) %>%
+  select(Location, Period, mortalityRatePoisoningPer100k)
 
-dataAvailabilityForUHC = read.csv("data/dataAvailibilityForUhc.csv", stringsAsFactors = TRUE) %>%
+# 2016
+mortalityRateUnsafeWash = read.csv("data/mortalityRateUnsafeWash.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  #filter(row_number() == 1) %>%
-  #filter(Period > 2014) %>%
-  mutate(dataAvailabilityForUHC = First.Tooltip) %>%
-  select(Location, Period, dataAvailabilityForUHC)
+  filter(Period > 2014) %>%
+  mutate(mortalityRateUnsafeWashPer100k = First.Tooltip) %>%
+  select(Location, Period, mortalityRateUnsafeWashPer100k)
 
 # 2015 to 2019
-dentistsAvailable = read.csv("data/dentists.csv", stringsAsFactors = TRUE) %>%
+neonatalMortality = read.csv("data/neonatalMortalityRate.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
   group_by(Location) %>%
   arrange(Period) %>%
-  #filter(row_number() == 1) %>%
   filter(Period > 2014) %>%
-  mutate(dentistsAvailable = First.Tooltip) %>%
-  select(Location, Period, dentistsAvailable)
-
-violenceAgainstWomen = read.csv("data/eliminateViolenceAgainstWomen.csv", stringsAsFactors = TRUE) %>%
-  filter(Dim2 == "15-49 years") %>%
-  group_by(Location) %>%
-  arrange(Period) %>%
-  #filter(row_number() == 1) %>%
-  #filter(Period > 2014) %>%
-  mutate(violenceAgainstWomen = First.Tooltip) %>%
-  select(Location, Period, violenceAgainstWomen)
+  mutate(neonatalMortalityPer1k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, neonatalMortalityPer1k)
 ```
 
 
