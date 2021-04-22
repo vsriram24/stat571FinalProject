@@ -170,15 +170,18 @@ happiness_2015to2019$Period = happiness_2015to2019$year
 
 ```{r}
 newHappiness = happiness_2015to2019 %>%
-  left_join(probOfDyingFromDisease, by=c("Location", "Period")) %>%
-  left_join(adolescentBirthRate, by=c("Location", "Period")) %>%
-  left_join(alcoholSubstanceAbuse, by=c("Location", "Period")) %>%
-  left_join(basicHandwashing, by=c("Location", "Period")) %>%
-  left_join(basicSanitizationServices, by=c("Location", "Period")) %>%
-  left_join(birthsAttendedBySkilledPersonal, by=c("Location", "Period")) %>%
-  left_join(cleanFuelAndTech, by=c("Location", "Period")) %>%
-  left_join(dentistsAvailable, by=c("Location", "Period")) %>%
-  left_join(suicideRates, by=c("Location", "Period"))
+  left_join(healthyLifeExpectancy, by=c("Location", "Period")) %>%
+  left_join(hepBAntigen, by=c("Location", "Period")) %>%
+  left_join(malaria, by=c("Location", "Period")) %>%
+  left_join(tuberculosis, by=c("Location", "Period")) %>%
+  left_join(infantMortality, by=c("Location", "Period")) %>%
+  left_join(NTDIntervention, by=c("Location", "Period")) %>%
+  left_join(lifeExpectancy, by=c("Location", "Period")) %>%
+  left_join(maternalMortality, by=c("Location", "Period")) %>%
+  left_join(doctors, by=c("Location", "Period")) %>%
+  left_join(mortalityRatePoisoning, by=c("Location", "Period")) %>%
+  left_join(mortalityRateUnsafeWash, by=c("Location", "Period")) %>%
+  left_join(neonatalMortality, by=c("Location", "Period"))
 
 # Pick before 2019, b/c a lot of our world health data is missing after 2018
 newHappiness_pre2019 = newHappiness %>%
