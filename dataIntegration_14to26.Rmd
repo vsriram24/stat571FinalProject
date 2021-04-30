@@ -1,0 +1,183 @@
+---
+title: "dataIntegration_file14to26"
+output: pdf_document
+---
+
+```{r}
+library(dplyr)
+```
+
+# Read in happiness data
+```{r}
+happiness2019 = read.csv("data/2019.csv")
+happiness2019$year = rep(2019, nrow(happiness2019))
+happiness2019 = happiness2019 %>%
+  mutate(Country = Country.or.region) %>%
+  mutate(Happiness.Score = Score) %>%
+  mutate(Economy..GDP.per.Capita. = GDP.per.capita) %>%
+  mutate(Family = Social.support) %>%
+  mutate(Health..Life.Expectancy. = Healthy.life.expectancy) %>%
+  mutate(Freedom = Freedom.to.make.life.choices) %>%
+  mutate(Trust..Government.Corruption. = Perceptions.of.corruption) %>%
+  select(Country, Happiness.Score, Economy..GDP.per.Capita., Family, Health..Life.Expectancy., Freedom, Generosity, Trust..Government.Corruption., year)
+happiness2018 = read.csv("data/2018.csv")
+happiness2018$year = rep(2018, nrow(happiness2018))
+happiness2018 = happiness2018 %>%
+  mutate(Country = Country.or.region) %>%
+  mutate(Happiness.Score = Score) %>%
+  mutate(Economy..GDP.per.Capita. = GDP.per.capita) %>%
+  mutate(Family = Social.support) %>%
+  mutate(Health..Life.Expectancy. = Healthy.life.expectancy) %>%
+  mutate(Freedom = Freedom.to.make.life.choices) %>%
+  mutate(Trust..Government.Corruption. = Perceptions.of.corruption) %>%
+  select(Country, Happiness.Score, Economy..GDP.per.Capita., Family, Health..Life.Expectancy., Freedom, Generosity, Trust..Government.Corruption., year)
+happiness2017 = read.csv("data/2017.csv")
+happiness2017$year = rep(2017, nrow(happiness2017))
+happiness2017 = happiness2017 %>%
+  select(Country, Happiness.Score, Economy..GDP.per.Capita., Family, Health..Life.Expectancy., Freedom, Generosity, Trust..Government.Corruption., year)
+happiness2016 = read.csv("data/2016.csv")
+happiness2016$year = rep(2016, nrow(happiness2016))
+happiness2016 = happiness2016 %>%
+  select(Country, Happiness.Score, Economy..GDP.per.Capita., Family, Health..Life.Expectancy., Freedom, Generosity, Trust..Government.Corruption., year)
+happiness2015 = read.csv("data/2015.csv")
+happiness2015$year = rep(2015, nrow(happiness2015))
+happiness2015 = happiness2015 %>%
+  select(Country, Happiness.Score, Economy..GDP.per.Capita., Family, Health..Life.Expectancy., Freedom, Generosity, Trust..Government.Corruption., year)
+happiness_2015to2019 = rbind(happiness2015, happiness2016, happiness2017, happiness2018, happiness2019)
+```
+
+
+# Read in world health data
+```{r}
+# 2015, 2019
+healthyLifeExpectancy = read.csv("data/HALElifeExpectancyAtBirth.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(healthyLifeExpectancy = First.Tooltip) %>%
+  select(Location, Period, healthyLifeExpectancy)
+# Ignored next dataset because it only had data by region
+# 2015
+hepBAntigen = read.csv("data/hepatitusBsurfaceAntigen.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(hepBAntigenPrev = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, hepBAntigenPrev)
+# 2015 to 2018
+malaria = read.csv("data/incedenceOfMalaria.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(malariaPer1kAtRisk = First.Tooltip) %>%
+  select(Location, Period, malariaPer1kAtRisk)
+# some countries have 0, may need to exclude
+# 2015 to 2019
+tuberculosis = read.csv("data/incedenceOfTuberculosis.csv", stringsAsFactors = TRUE) %>%
+ group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(tbPer100k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, tbPer100k)
+# 2015 to 2019
+infantMortality = read.csv("data/infantMortalityRate.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(infantMortalityPer1k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, infantMortalityPer1k)
+# 2015 to 2018
+NTDIntervention = read.csv("data/interventionAgianstNTDs.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(NTDIntervention = First.Tooltip) %>%
+  select(Location, Period, NTDIntervention)
+# Provides # of people not rate so may not be best measure
+# 2015, 2019
+lifeExpectancy = read.csv("data/lifeExpectancyAtBirth.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(lifeExpectancy = First.Tooltip) %>%
+  select(Location, Period, lifeExpectancy)
+# 2015 to 2017
+maternalMortality = read.csv("data/maternalMortalityRatio.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(maternalMortalityPer100k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, maternalMortalityPer100k)
+# 2015 to 2018 (not consistent by country)
+doctors = read.csv("data/medicalDoctors.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(DoctorsPer10k = First.Tooltip) %>%
+  select(Location, Period, DoctorsPer10k)
+# 2015 to 2016
+mortalityRatePoisoning = read.csv("data/mortalityRatePoisoning.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(mortalityRatePoisoningPer100k = First.Tooltip) %>%
+  select(Location, Period, mortalityRatePoisoningPer100k)
+# 2016
+mortalityRateUnsafeWash = read.csv("data/mortalityRateUnsafeWash.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(mortalityRateUnsafeWashPer100k = First.Tooltip) %>%
+  select(Location, Period, mortalityRateUnsafeWashPer100k)
+# 2015 to 2019
+neonatalMortality = read.csv("data/neonatalMortalityRate.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(Period) %>%
+  filter(Period > 2014) %>%
+  mutate(neonatalMortalityPer1k = gsub( " .*$", "", First.Tooltip )) %>%
+  select(Location, Period, neonatalMortalityPer1k)
+```
+
+
+# Merge Happiness data with world health data
+```{r}
+happiness_2015to2019$Location = happiness_2015to2019$Country
+happiness_2015to2019$Period = happiness_2015to2019$year
+```
+
+```{r}
+newHappiness = happiness_2015to2019 %>%
+  left_join(healthyLifeExpectancy, by=c("Location", "Period")) %>%
+  left_join(hepBAntigen, by=c("Location", "Period")) %>%
+  left_join(malaria, by=c("Location", "Period")) %>%
+  left_join(tuberculosis, by=c("Location", "Period")) %>%
+  left_join(infantMortality, by=c("Location", "Period")) %>%
+  left_join(NTDIntervention, by=c("Location", "Period")) %>%
+  left_join(lifeExpectancy, by=c("Location", "Period")) %>%
+  left_join(maternalMortality, by=c("Location", "Period")) %>%
+  left_join(doctors, by=c("Location", "Period")) %>%
+  left_join(mortalityRatePoisoning, by=c("Location", "Period")) %>%
+  left_join(mortalityRateUnsafeWash, by=c("Location", "Period")) %>%
+  left_join(neonatalMortality, by=c("Location", "Period"))
+# Pick before 2019, b/c a lot of our world health data is missing after 2018
+newHappiness_pre2019 = newHappiness %>%
+  filter(Period < 2019)
+```
+
+
+# Need to figure out if we should drop certain variables based upon number of missing cases
+```{r}
+colSums(is.na(newHappiness))
+colSums(is.na(newHappiness_pre2019))
+```
+
+
+```{r}
+rowSums(is.na(newHappiness_pre2019))
+```
