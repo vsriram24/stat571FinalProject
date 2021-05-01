@@ -191,7 +191,29 @@ rowSums(is.na(newHappiness))
 ```
 
 
+```{r}
+newHappiness_naOmitted = na.omit(newHappiness)
+```
 
 
+# Time for PCA
+```{r}
+newHappiness.centered.scaled <- scale(newHappiness_naOmitted, center = T, scale = F)
+newHappiness.centered.scaled.df <- as.data.frame(newHappiness.centered.scaled)
+# Center the data without scaling
 
+newHappiness.pca <- prcomp(newHappiness.centered.scaled.df, scale. = F)
+newHappiness.pca.loading <- newHappiness.pca$rotation
+# Run PCA and store loadings
+
+knitr::kable(newHappiness.pca.loading)
+sum(newHappiness.pca.loading[,1]*newHappiness.pca.loading[,1])
+sum(newHappiness.pca.loading[,2]*newHappiness.pca.loading[,2])
+# Check that they are unit vectors by calculating their eucledian distance from origin
+
+cor(newHappiness.pca.loading[,1],newHappiness.pca.loading[,2])
+# Correlation between loadings
+```  
+
+```
 
