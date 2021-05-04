@@ -395,6 +395,7 @@ newHappiness_filtered = newHappiness_filtered[which(rowMeans(!is.na(newHappiness
 
 # EDA
 ```{r}
+
 ```
 
 
