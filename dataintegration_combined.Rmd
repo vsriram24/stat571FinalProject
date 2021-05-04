@@ -348,9 +348,7 @@ WHOregionLifeExpectancyAtBirth = read.csv("data/WHOregionLifeExpectancyAtBirth.c
   select(Location, Period, WHOregionLifeExpectancyAtBirth)
 ```
 
-
 # Merge Happiness data with world health data
-
 ```{r}
 newHappiness = happiness2019 %>%
   left_join(probOfDyingFromDisease, by=c("Location")) %>%
@@ -379,35 +377,26 @@ write.csv(newHappiness, "./data/fullHappiness.csv")
 ```
 
 
-
-
-
 ```{r}
 newHappiness = read.csv("./data/fullHappiness.csv")
 ```
 
-# Need to figure out if we should drop certain variables based upon number of missing cases
+# Drop columns and rows with an inordinate number of missing values
 ```{r}
 colSums(is.na(newHappiness))
-```
 
-```{r}
 newHappiness_filtered = newHappiness %>%
   select(-basicHandwashing, -malariaPer1kAtRisk)
-```
 
-
-```{r}
 rowSums(is.na(newHappiness_filtered))
-```
 
-```{r}
 newHappiness_filtered = newHappiness_filtered[which(rowMeans(!is.na(newHappiness_filtered)) > 0.5), ]
 ```
 
-```{R}
-colSums(is.na(newHappiness_filtered))
+# EDA
+```{r}
 ```
+
 
 ```{r}
 newHappiness_filtered_imputed = newHappiness_filtered
@@ -433,13 +422,9 @@ newHappiness_filtered_imputed = newHappiness_filtered_imputed %>%
 ```{r}
 x_newHappiness = newHappiness_filtered_imputed %>%
   select(-Location, -Happiness.Score)
+x_newHappiness = sapply(x_newHappiness, as.numeric)
 
 y_newHappiness = newHappiness_filtered_imputed$Happiness.Score
-```
-
-```{R}
-x_newHappiness = sapply(x_newHappiness, as.numeric)
-sapply(x_newHappiness, class)
 ```
 
 ```{r}
@@ -457,6 +442,7 @@ cor(newHappiness.centered.pca.loading[,1],newHappiness.centered.pca.loading[,2])
 
 ```{r}
 summary(newHappiness.centered.pca)$importance
+
 plot(summary(newHappiness.centered.pca)$importance[2, ], ylab="Proportion of Variance", xlab="PC",
 main="Proportion of Variance")
 
@@ -477,16 +463,18 @@ fviz_nbclust(as.data.frame(x_newHappiness), kmeans, method = "wss")
 ```
 ```{r}
 set.seed(123)
-newHappiness.kmeans <- as.data.frame(x_newHappiness) %>% kmeans(centers = 2 ,nstart = 1)
+newHappiness.kmeans <- as.data.frame(x_newHappiness) %>% kmeans(centers = 3, nstart = 1)
+
 x_newHappiness <- as.data.frame(x_newHappiness) %>% 
   mutate(group = newHappiness.kmeans$cluster) %>% 
+  mutate(name = newHappiness_filtered_imputed$Location) %>%
   arrange(group)
-
 
 data.frame(pc1 = newHappiness.centered.pca$x[, 1],
            pc2 = newHappiness.centered.pca$x[, 2],
-           group = as.factor(newHappiness.kmeans$cluster)) %>%
-  ggplot(aes(x = pc1, y = pc2, col = group)) + geom_point() + ggtitle("Clustering over PC1 and PC2")
+           group = as.factor(newHappiness.kmeans$cluster),
+           name = as.factor(newHappiness_filtered_imputed$Location)) %>%
+  ggplot(aes(x = pc1, y = pc2, col = group, label = name)) + geom_point() + geom_text(aes(label=name)) + ggtitle("Clustering over PC1 and PC2")
 ```
 
 
