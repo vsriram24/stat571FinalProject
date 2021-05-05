@@ -239,28 +239,21 @@ neonatalMortality = read.csv("data/neonatalMortalityRate.csv", stringsAsFactors 
   select(Location, neonatalMortalityPer1k)
 
 # 2015 and 2019, Data adjusted to remove range, No Data converted to blank and <0.01 converted to 0
-#NewHivInfectionsPer1000 = read.csv("data/newHivInfectionsNEW.csv", stringsAsFactors = TRUE) %>%
-#  filter(Dim1 == "Both sexes") %>%
-#  group_by(Location) %>%
-#  arrange(Period) %>%
-#  mutate(NewHivInfectionsPer1000 = First.Tooltip) %>%
-#  select(Location, Period, NewHivInfectionsPer1000)
+NewHivInfectionsPer1000 = read.csv("data/newHivInfectionsNEW.csv", stringsAsFactors = TRUE) %>%
+  filter(Dim1 == "Both sexes") %>%
+  group_by(Location) %>%
+  arrange(desc(Period)) %>%
+  filter(row_number() == 1) %>%
+  mutate(NewHivInfectionsPer1000 = First.Tooltip) %>%
+  select(Location, NewHivInfectionsPer1000)
 
 # 2015 and 2019, but not all countries have data for each of those years
-#NursingMidwife = read.csv("data/nursingandmidwife.csv", stringsAsFactors = TRUE) %>%
-#  group_by(Location) %>%
-#  arrange(desc(Period)) %>%
-#  filter(row_number() == 1) %>%
-#  mutate(NursingMidwife = HALE_LIFE_expectancy) %>%
-#  select(Location, Period, NursingMidwife)
-
-# IT IS BY REGION AND NOT BY COUNTRY
-#HaleInLifeExpectancy = read.csv("data/ofHaleInLifeExpectancyADJ.csv", stringsAsFactors = TRUE) %>%
-#  group_by(Location) %>%
-#  arrange(Period) %>%
-#  #filter(row_number() == 1) %>%
-#  mutate(HaleInLifeExpectancy = First.Tooltip) %>%
-#  select(Location, Period, HaleInLifeExpectancy)
+NursingMidwife = read.csv("data/nursingandmidwife.csv", stringsAsFactors = TRUE) %>%
+  group_by(Location) %>%
+  arrange(desc(Period)) %>%
+  filter(row_number() == 1) %>%
+  mutate(NursingMidwife = First.Tooltip) %>%
+  select(Location, NursingMidwife)
 
 # 2015 to 2018 
 PharmacistsPer10000 = read.csv("data/pharmacists.csv", stringsAsFactors = TRUE) %>%
@@ -348,6 +341,9 @@ WHOregionLifeExpectancyAtBirth = read.csv("data/WHOregionLifeExpectancyAtBirth.c
   mutate(WHOregionLifeExpectancyAtBirth = First.Tooltip) %>%
   select(Location, Period, WHOregionLifeExpectancyAtBirth)
 ```
+
+
+To-do: include New HIV Infection and Nursing Midwife datasets
 
 # Merge Happiness data with world health data
 ```{r}
