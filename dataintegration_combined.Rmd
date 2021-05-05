@@ -6,6 +6,7 @@ output: pdf_document
 ```{r}
 library(dplyr)
 library(ggplot2)
+library(glmnet)
 ```
 
 # Read in happiness data
@@ -143,6 +144,7 @@ healthyLifeExpectancy = read.csv("data/HALElifeExpectancyAtBirth.csv", stringsAs
   select(Location, healthyLifeExpectancy)
 
 # Ignored next dataset because it only had data by region
+
 # 2015
 hepBAntigen = read.csv("data/hepatitusBsurfaceAntigen.csv", stringsAsFactors = TRUE) %>%
   group_by(Location) %>%
@@ -261,7 +263,7 @@ PharmacistsPer10000 = read.csv("data/pharmacists.csv", stringsAsFactors = TRUE) 
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(PharmacistsPer10000 = First.Tooltip) %>%
-  select(Location, Period, PharmacistsPer10000)
+  select(Location, PharmacistsPer10000)
 
 # 2015+, most countries dont have 2015+ data so may need to relax this condition
 PopHealthcareExpGreaterThan10 = read.csv("data/population10SDG3.8.2.csv", stringsAsFactors = TRUE) %>%
@@ -270,7 +272,7 @@ PopHealthcareExpGreaterThan10 = read.csv("data/population10SDG3.8.2.csv", string
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(PopHealthcareExpGreaterThan10 = First.Tooltip) %>%
-  select(Location, Period, PopHealthcareExpGreaterThan10)
+  select(Location, PopHealthcareExpGreaterThan10)
 
 # 2015+, most countries dont have 2015+ data so may need to relax this condition
 PopHealthcareExpGreaterThan25 = read.csv("data/population25SDG3.8.2.csv", stringsAsFactors = TRUE) %>%
@@ -279,7 +281,7 @@ PopHealthcareExpGreaterThan25 = read.csv("data/population25SDG3.8.2.csv", string
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(PopHealthcareExpGreaterThan25 = First.Tooltip) %>%
-  select(Location, Period, PopHealthcareExpGreaterThan25)
+  select(Location, PopHealthcareExpGreaterThan25)
 
 # 2015 to 2019, only latest year for each country included
 ModernFamilyPlanningPercent = read.csv("data/reproductiveAgeWomen.csv", stringsAsFactors = TRUE) %>%
@@ -287,7 +289,7 @@ ModernFamilyPlanningPercent = read.csv("data/reproductiveAgeWomen.csv", stringsA
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(ModernFamilyPlanningPercent = First.Tooltip) %>%
-  select(Location, Period, ModernFamilyPlanningPercent)
+  select(Location,ModernFamilyPlanningPercent)
 
 # 2016 Only available
 RoadTrafficDeathRatePer100000 = read.csv("data/roadTrafficDeaths.csv", stringsAsFactors = TRUE) %>%
@@ -295,7 +297,7 @@ RoadTrafficDeathRatePer100000 = read.csv("data/roadTrafficDeaths.csv", stringsAs
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(RoadTrafficDeathRatePer100000 = First.Tooltip) %>%
-  select(Location, Period, RoadTrafficDeathRatePer100000)
+  select(Location, RoadTrafficDeathRatePer100000)
 
 # 2015+
 PopPercentSanitationServices = read.csv("data/safelySanitization.csv", stringsAsFactors = TRUE) %>%
@@ -304,7 +306,7 @@ PopPercentSanitationServices = read.csv("data/safelySanitization.csv", stringsAs
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(PopPercentSanitationServices = First.Tooltip) %>%
-  select(Location, Period, PopPercentSanitationServices)
+  select(Location, PopPercentSanitationServices)
 
 # 2015+
 tobaccoAge15plus = read.csv("data/tobaccoAge15.csv", stringsAsFactors = TRUE) %>%
@@ -313,7 +315,7 @@ tobaccoAge15plus = read.csv("data/tobaccoAge15.csv", stringsAsFactors = TRUE) %>
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(tobaccoAge15plus = First.Tooltip) %>%
-  select(Location, Period, tobaccoAge15plus)
+  select(Location, tobaccoAge15plus)
 
 # 2015+
 uhcIndex = read.csv("data/uhcCoverage.csv", stringsAsFactors = TRUE) %>%
@@ -321,7 +323,7 @@ uhcIndex = read.csv("data/uhcCoverage.csv", stringsAsFactors = TRUE) %>%
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(uhcIndex = First.Tooltip) %>%
-  select(Location, Period, uhcIndex)
+  select(Location, uhcIndex)
 
 # 2015+
 under5MortalityRate = read.csv("data/under5MortalityRateADJ.csv", stringsAsFactors = TRUE) %>%
@@ -330,7 +332,7 @@ under5MortalityRate = read.csv("data/under5MortalityRateADJ.csv", stringsAsFacto
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(under5MortalityRate = First.Tooltip) %>%
-  select(Location, Period, under5MortalityRate)
+  select(Location, under5MortalityRate)
 
 # IT IS BY REGION AND NOT BY COUNTRY
 WHOregionLifeExpectancyAtBirth = read.csv("data/WHOregionLifeExpectancyAtBirth.csv", stringsAsFactors = TRUE) %>%
@@ -339,7 +341,7 @@ WHOregionLifeExpectancyAtBirth = read.csv("data/WHOregionLifeExpectancyAtBirth.c
   arrange(desc(Period)) %>%
   filter(row_number() == 1) %>%
   mutate(WHOregionLifeExpectancyAtBirth = First.Tooltip) %>%
-  select(Location, Period, WHOregionLifeExpectancyAtBirth)
+  select(Location,  WHOregionLifeExpectancyAtBirth)
 ```
 
 
@@ -368,7 +370,16 @@ newHappiness = happiness2019 %>%
   left_join(doctors, by=c("Location")) %>%
   left_join(mortalityRatePoisoning, by=c("Location")) %>%
   left_join(mortalityRateUnsafeWash, by=c("Location")) %>%
-  left_join(neonatalMortality, by=c("Location"))
+  left_join(neonatalMortality, by=c("Location")) %>%
+  left_join(PharmacistsPer10000, by=c("Location")) %>%
+  left_join(PopHealthcareExpGreaterThan10, by=c("Location")) %>%
+  left_join(PopHealthcareExpGreaterThan25, by=c("Location")) %>%
+  left_join(ModernFamilyPlanningPercent, by=c("Location")) %>%
+  left_join(RoadTrafficDeathRatePer100000, by=c("Location")) %>%
+  left_join(PopPercentSanitationServices, by=c("Location")) %>%
+  left_join(tobaccoAge15plus, by=c("Location")) %>%
+  left_join(uhcIndex, by=c("Location")) %>%
+  left_join(under5MortalityRate, by=c("Location"))
 
 write.csv(newHappiness, "./data/fullHappiness.csv")
 ```
@@ -383,7 +394,7 @@ newHappiness = read.csv("./data/fullHappiness.csv")
 colSums(is.na(newHappiness))
 
 newHappiness_filtered = newHappiness %>%
-  select(-basicHandwashing, -malariaPer1kAtRisk)
+  select(-basicHandwashing, -malariaPer1kAtRisk, -ModernFamilyPlanningPercent,  -PopPercentSanitationServices)
 
 rowSums(is.na(newHappiness_filtered))
 
@@ -551,6 +562,20 @@ data.frame(pc1 = newHappiness.centered.pca$x[, 1],
            group = as.factor(newHappiness.kmeans$cluster),
            name = as.factor(newHappiness_filtered_imputed$Location)) %>%
   ggplot(aes(x = pc1, y = pc2, col = group, label = name)) + geom_point() + geom_text(aes(label=name)) + ggtitle("Clustering over PC1 and PC2")
+```
+
+# Regression
+```{r}
+data.happiness <- as.data.frame(na.omit(newHappiness_filtered))
+Y <- data.happiness[, 3]
+X.hap <- model.matrix(Happiness.Score~.-X-Location, data=data.happiness)[, -1]
+fit.hap <- cv.glmnet(X.hap, Y, alpha=1, nfolds=10)
+plot(fit.hap$lambda)
+coef.1se <- coef(fit.hap, s="lambda.1se")
+var.1se <- coef.1se@Dimnames[[1]][coef.1se@i + 1][-1]
+lm.input <- as.formula(paste("Happiness.Score", "~", paste(var.1se, collapse = "+")))
+fit.1se.lm <- lm(lm.input, data=data.happiness)
+summary(fit.1se.lm) 
 ```
 
 
