@@ -7,6 +7,7 @@ output: pdf_document
 library(dplyr)
 library(ggplot2)
 library(glmnet)
+library (leaps)
 ```
 
 # Read in happiness data
@@ -371,6 +372,8 @@ newHappiness = happiness2019 %>%
   left_join(mortalityRatePoisoning, by=c("Location")) %>%
   left_join(mortalityRateUnsafeWash, by=c("Location")) %>%
   left_join(neonatalMortality, by=c("Location")) %>%
+  left_join(NewHivInfectionsPer1000, by=c("Location")) %>%
+  left_join(NursingMidwife, by=c("Location")) %>%
   left_join(PharmacistsPer10000, by=c("Location")) %>%
   left_join(PopHealthcareExpGreaterThan10, by=c("Location")) %>%
   left_join(PopHealthcareExpGreaterThan25, by=c("Location")) %>%
@@ -394,7 +397,7 @@ newHappiness = read.csv("./data/fullHappiness.csv")
 colSums(is.na(newHappiness))
 
 newHappiness_filtered = newHappiness %>%
-  select(-basicHandwashing, -malariaPer1kAtRisk, -ModernFamilyPlanningPercent,  -PopPercentSanitationServices)
+  select(-basicHandwashing, -malariaPer1kAtRisk, -ModernFamilyPlanningPercent,  -PopPercentSanitationServices, -NewHivInfectionsPer1000)
 
 rowSums(is.na(newHappiness_filtered))
 
@@ -565,8 +568,14 @@ data.frame(pc1 = newHappiness.centered.pca$x[, 1],
 ```
 
 # Regression
-```{r}
-data.happiness <- as.data.frame(na.omit(newHappiness_filtered))
+```{r clean data for regression}
+colSums(is.na(newHappiness_filtered))
+newHappiness_lasso <- newHappiness_filtered %>%
+  select(-Economy..GDP.per.Capita., - Family, - Health..Life.Expectancy., -Freedom, -Generosity, -Trust..Government.Corruption., -year)
+```
+
+```{r Lasso}
+data.happiness <- as.data.frame(na.omit(newHappiness_lasso))
 Y <- data.happiness[, 3]
 X.hap <- model.matrix(Happiness.Score~.-X-Location, data=data.happiness)[, -1]
 fit.hap <- cv.glmnet(X.hap, Y, alpha=1, nfolds=10)
@@ -575,7 +584,26 @@ coef.1se <- coef(fit.hap, s="lambda.1se")
 var.1se <- coef.1se@Dimnames[[1]][coef.1se@i + 1][-1]
 lm.input <- as.formula(paste("Happiness.Score", "~", paste(var.1se, collapse = "+")))
 fit.1se.lm <- lm(lm.input, data=data.happiness)
-summary(fit.1se.lm) 
+summary(fit.1se.lm)
+
+#add correlation matrix?
+```
+
+```{r cp tuning}
+data.happiness.sub <-  data.happiness[,c("Happiness.Score", var.1se)]
+
+fit.exh <- regsubsets(Happiness.Score ~., data.happiness.sub , nvmax=15, method="exhaustive")
+fit.cp <- summary(fit.exh)
+opt.size <- which.min(summary(fit.exh)$cp)
+cp.var.1 <- fit.cp$which
+cp.var <- colnames(cp.var.1)[cp.var.1[opt.size, ]][-1]
+cp.fit <- lm(Happiness.Score~., data.happiness[, c("Happiness.Score", cp.var)])
+summary(cp.fit)
+```
+
+All variables are significant at the .05 level, so we don't need to eliminat further variables with backwards selection.
+
+
 ```
 
 
