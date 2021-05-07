@@ -507,7 +507,13 @@ newHappiness_filtered_imputed$DoctorsPer10k[is.na(newHappiness_filtered_imputed$
 newHappiness_filtered_imputed = newHappiness_filtered_imputed %>%
   select(-X, -year)
 ```
-
+# Investigate Variable COrrelation
+```{r}
+varcorr <- cor(newHappiness_filtered_imputed[-1])
+library(corrplot)
+corrplot(varcorr, type = "upper", order = "hclust", 
+         tl.col = "black", tl.cex = 0.5)
+```
 
 # Perform PCA
 ```{r}
