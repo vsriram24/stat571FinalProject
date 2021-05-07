@@ -598,25 +598,39 @@ newHappiness_lasso <- newHappiness_filtered %>%
   select(-Economy..GDP.per.Capita., - Family, - Health..Life.Expectancy., -Freedom, -Generosity, -Trust..Government.Corruption., -year)
 ```
 
-```{r Lasso}
+Explain taking out variables and countries with NAs.
+
+
+```{r Lasso setup}
 data.happiness <- as.data.frame(na.omit(newHappiness_lasso))
 Y <- data.happiness[, 3]
 X.hap <- model.matrix(Happiness.Score~.-X-Location, data=data.happiness)[, -1]
 fit.hap <- cv.glmnet(X.hap, Y, alpha=1, nfolds=10)
-plot(fit.hap$lambda)
+plot(fit.hap)
+```
+
+We can see from this plot that lambda.1se is ~0.12 and has ~8 nonzero coefficients.
+
+
+```{r Lasso}
 coef.1se <- coef(fit.hap, s="lambda.1se")
 var.1se <- coef.1se@Dimnames[[1]][coef.1se@i + 1][-1]
 lm.input <- as.formula(paste("Happiness.Score", "~", paste(var.1se, collapse = "+")))
 fit.1se.lm <- lm(lm.input, data=data.happiness)
 summary(fit.1se.lm)
-
-#add correlation matrix?
 ```
+The model we get from Lasso includes 8 variables, although not all of them are significant at the .05 level. Some additional tuning of the model is required.
 
 ```{r cp tuning}
 data.happiness.sub <-  data.happiness[,c("Happiness.Score", var.1se)]
 
 fit.exh <- regsubsets(Happiness.Score ~., data.happiness.sub , nvmax=15, method="exhaustive")
+plot(summary(fit.exh)$cp)
+```
+
+We see from the cp plot that six variables minimizes cp.
+
+```{r select variables cp}
 fit.cp <- summary(fit.exh)
 opt.size <- which.min(summary(fit.exh)$cp)
 cp.var.1 <- fit.cp$which
@@ -625,9 +639,12 @@ cp.fit <- lm(Happiness.Score~., data.happiness[, c("Happiness.Score", cp.var)])
 summary(cp.fit)
 ```
 
-All variables are significant at the .05 level, so we don't need to eliminat further variables with backwards selection.
+All variables are significant at the .05 level, so we don't need to eliminate further variables with backwards selection.
 
-
+```{r}
+plot(cp.fit,1)
+plot(cp.fit,2)
 ```
 
+From the residual and normal Q-Q plot, we can see that the linear model assumptions are generally satisfied.
 
