@@ -346,8 +346,6 @@ WHOregionLifeExpectancyAtBirth = read.csv("data/WHOregionLifeExpectancyAtBirth.c
 ```
 
 
-To-do: include New HIV Infection and Nursing Midwife datasets
-
 # Merge Happiness data with world health data
 ```{r}
 newHappiness = happiness2019 %>%
@@ -489,6 +487,10 @@ ggplot(newHappiness_filtered, aes(x=reorder(Location, Happiness.Score), y=Happin
 ```
 
 # Impute missing values
+```{R}
+colSums(is.na(newHappiness_filtered))
+```
+
 ```{r}
 newHappiness_filtered_imputed = newHappiness_filtered
 
@@ -504,10 +506,25 @@ newHappiness_filtered_imputed$infantMortalityPer1k[is.na(newHappiness_filtered_i
 
 newHappiness_filtered_imputed$DoctorsPer10k[is.na(newHappiness_filtered_imputed$DoctorsPer10k)] <- mean(newHappiness_filtered_imputed$DoctorsPer10k, na.rm = TRUE)
 
+newHappiness_filtered_imputed$NursingMidwife[is.na(newHappiness_filtered_imputed$NursingMidwife)] <- mean(newHappiness_filtered_imputed$NursingMidwife, na.rm = TRUE)
+
+newHappiness_filtered_imputed$PharmacistsPer10000[is.na(newHappiness_filtered_imputed$PharmacistsPer10000)] <- mean(newHappiness_filtered_imputed$PharmacistsPer10000, na.rm = TRUE)
+
+newHappiness_filtered_imputed$PopHealthcareExpGreaterThan10[is.na(newHappiness_filtered_imputed$PopHealthcareExpGreaterThan10)] <- mean(newHappiness_filtered_imputed$PopHealthcareExpGreaterThan10, na.rm = TRUE)
+
+newHappiness_filtered_imputed$PopHealthcareExpGreaterThan25[is.na(newHappiness_filtered_imputed$PopHealthcareExpGreaterThan25)] <- mean(newHappiness_filtered_imputed$PopHealthcareExpGreaterThan25, na.rm = TRUE)
+
+newHappiness_filtered_imputed$RoadTrafficDeathRatePer100000[is.na(newHappiness_filtered_imputed$RoadTrafficDeathRatePer100000)] <- mean(newHappiness_filtered_imputed$RoadTrafficDeathRatePer100000, na.rm = TRUE)
+
+newHappiness_filtered_imputed$tobaccoAge15plus[is.na(newHappiness_filtered_imputed$tobaccoAge15plus)] <- mean(newHappiness_filtered_imputed$tobaccoAge15plus, na.rm = TRUE)
+
+newHappiness_filtered_imputed$under5MortalityRate[is.na(newHappiness_filtered_imputed$under5MortalityRate)] <- mean(newHappiness_filtered_imputed$under5MortalityRate, na.rm = TRUE)
+
 newHappiness_filtered_imputed = newHappiness_filtered_imputed %>%
   select(-X, -year)
 ```
-# Investigate Variable COrrelation
+
+# Investigate Variable Correlation
 ```{r}
 varcorr <- cor(newHappiness_filtered_imputed[-1])
 library(corrplot)
