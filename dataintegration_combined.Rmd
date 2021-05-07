@@ -406,80 +406,81 @@ newHappiness_filtered = newHappiness_filtered[which(rowMeans(!is.na(newHappiness
 
 # EDA
 ```{r}
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Economy..GDP.per.Capita., ylab = "Happiness Score", xlab = "GDP per Capita")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Economy..GDP.per.Capita., xlab = "Happiness Score", ylab = "GDP per Capita")
 text(newHappiness_filtered$Economy..GDP.per.Capita.~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Family, ylab = "Happiness Score", xlab = "Family")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Family, xlab = "Happiness Score", ylab = "Family")
 text(newHappiness_filtered$Family~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Health..Life.Expectancy., ylab = "Happiness Score", xlab = "Life Expectancy")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Health..Life.Expectancy., xlab = "Happiness Score", ylab = "Life Expectancy")
 text(newHappiness_filtered$Health..Life.Expectancy.~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Freedom, ylab = "Happiness Score", xlab = "Freedom")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Freedom, xlab = "Happiness Score", ylab = "Freedom")
 text(newHappiness_filtered$Freedom~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Generosity, ylab = "Happiness Score", xlab = "Generosity")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Generosity, xlab = "Happiness Score", ylab = "Generosity")
 text(newHappiness_filtered$Generosity~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Trust..Government.Corruption., ylab = "Happiness Score", xlab = "Government Corruption Trust")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$Trust..Government.Corruption., xlab = "Happiness Score", ylab = "Government Corruption Trust")
 text(newHappiness_filtered$Trust..Government.Corruption.~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$probOfDyingFromDisease, ylab = "Happiness Score", xlab = "Probability of Dying from Disease")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$probOfDyingFromDisease, xlab = "Happiness Score", ylab = "Probability of Dying from Disease")
 text(newHappiness_filtered$probOfDyingFromDisease~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$adolescentBirthRate, ylab = "Happiness Score", xlab = "Adolescent Birth Rate")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$adolescentBirthRate, xlab = "Happiness Score", ylab = "Adolescent Birth Rate")
 text(newHappiness_filtered$adolescentBirthRate~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$alcoholSubstanceAbuse, ylab = "Happiness Score", xlab = "Alcohol Substance Abuse")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$alcoholSubstanceAbuse, xlab = "Happiness Score", ylab = "Alcohol Substance Abuse")
 text(newHappiness_filtered$alcoholSubstanceAbuse~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$basicSanitizationServices, ylab = "Happiness Score", xlab = "Basic Sanitization Services")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$basicSanitizationServices, xlab = "Happiness Score", ylab = "Basic Sanitization Services")
 text(newHappiness_filtered$basicSanitizationServices~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$birthsAttendedBySkilledPersonal, ylab = "Happiness Score", xlab = "Births Attended by Skilled Personal")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$birthsAttendedBySkilledPersonal, xlab = "Happiness Score", ylab = "Births Attended by Skilled Personal")
 text(newHappiness_filtered$birthsAttendedBySkilledPersonal~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$cleanFuelAndTech, ylab = "Happiness Score", xlab = "Clean Fuel and Tech")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$cleanFuelAndTech, xlab = "Happiness Score", ylab = "Clean Fuel and Tech")
 text(newHappiness_filtered$cleanFuelAndTech~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$dentistsAvailable, ylab = "Happiness Score", xlab = "Dentists Available")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$dentistsAvailable, xlab = "Happiness Score", ylab = "Dentists Available")
 text(newHappiness_filtered$dentistsAvailable~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$suicideRates, ylab = "Happiness Score", xlab = "Suicide Rates")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$suicideRates, xlab = "Happiness Score", ylab = "Suicide Rates")
 text(newHappiness_filtered$suicideRates~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$healthyLifeExpectancy, ylab = "Happiness Score", xlab = "Healthy Life Expectancy")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$healthyLifeExpectancy, xlab = "Happiness Score", ylab = "Healthy Life Expectancy")
 text(newHappiness_filtered$healthyLifeExpectancy~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$hepBAntigenPrev, ylab = "Happiness Score", xlab = "Hep B Antigen Prevalence")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$hepBAntigenPrev, xlab = "Happiness Score", ylab = "Hep B Antigen Prevalence")
 text(newHappiness_filtered$hepBAntigenPrev~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$tbPer100k, ylab = "Happiness Score", xlab = "Tuberculosis per 100k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$tbPer100k, xlab = "Happiness Score", ylab = "Tuberculosis per 100k")
 text(newHappiness_filtered$tbPer100k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$infantMortalityPer1k, ylab = "Happiness Score", xlab = "Infant Mortality per 1k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$infantMortalityPer1k, xlab = "Happiness Score", ylab = "Infant Mortality per 1k")
 text(newHappiness_filtered$infantMortalityPer1k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$NTDIntervention, ylab = "Happiness Score", xlab = "NTD Intervention")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$NTDIntervention, xlab = "Happiness Score", ylab = "NTD Intervention")
 text(newHappiness_filtered$NTDIntervention~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$lifeExpectancy, ylab = "Happiness Score", xlab = "Life Expectancy")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$lifeExpectancy, xlab = "Happiness Score", ylab = "Life Expectancy")
 text(newHappiness_filtered$lifeExpectancy~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$maternalMortalityPer100k, ylab = "Happiness Score", xlab = "Maternal Mortality per 100k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$maternalMortalityPer100k, xlab = "Happiness Score", ylab = "Maternal Mortality per 100k")
 text(newHappiness_filtered$maternalMortalityPer100k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$DoctorsPer10k, ylab = "Happiness Score", xlab = "Doctors Perk 10k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$DoctorsPer10k, xlab = "Happiness Score", ylab = "Doctors Perk 10k")
 text(newHappiness_filtered$DoctorsPer10k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$mortalityRatePoisoningPer100k, ylab = "Happiness Score", xlab = "Mortality Rate Poisoning per 100k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$mortalityRatePoisoningPer100k, xlab = "Happiness Score", ylab = "Mortality Rate Poisoning per 100k")
 text(newHappiness_filtered$mortalityRatePoisoningPer100k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$mortalityRateUnsafeWashPer100k, ylab = "Happiness Score", xlab = "Mortality Rate Unsafe Washing per 100k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$mortalityRateUnsafeWashPer100k, xlab = "Happiness Score", ylab = "Mortality Rate Unsafe Washing per 100k")
 text(newHappiness_filtered$mortalityRateUnsafeWashPer100k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
 
-plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$neonatalMortalityPer1k, ylab = "Happiness Score", xlab = "Neonatal Mortality per 1k")
+plot(newHappiness_filtered$Happiness.Score, newHappiness_filtered$neonatalMortalityPer1k, xlab = "Happiness Score", ylab = "Neonatal Mortality per 1k")
 text(newHappiness_filtered$neonatalMortalityPer1k~newHappiness_filtered$Happiness.Score, labels = newHappiness_filtered$Location)
+
 
 ggplot(newHappiness_filtered, aes(x=reorder(Location, Happiness.Score), y=Happiness.Score)) + 
   geom_boxplot() +
