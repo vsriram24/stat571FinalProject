@@ -8,6 +8,7 @@ library(dplyr)
 library(ggplot2)
 library(glmnet)
 library (leaps)
+library(factoextra)
 ```
 
 # Read in happiness data
@@ -535,7 +536,7 @@ corrplot(varcorr, type = "upper", order = "hclust",
 # Perform PCA
 ```{r}
 x_newHappiness = newHappiness_filtered_imputed %>%
-  select(-Location, -Happiness.Score)
+  select(-Location, -Happiness.Score, -NTDIntervention)
 x_newHappiness = sapply(x_newHappiness, as.numeric)
 
 y_newHappiness = newHappiness_filtered_imputed$Happiness.Score
@@ -555,7 +556,7 @@ cor(newHappiness.centered.pca.loading[,1],newHappiness.centered.pca.loading[,2])
 ```
 
 ```{r}
-summary(newHappiness.centered.pca)$importance
+summary(newHappiness.centered.pca)$loading
 
 plot(summary(newHappiness.centered.pca)$importance[2, ], ylab="Proportion of Variance", xlab="PC",
 main="Proportion of Variance")
